@@ -1,0 +1,13 @@
+{
+  "name": "meat_api",
+  "description": "An API for restaurants",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "restify": "^8.5.1"
+  },
+  "devDependencies": {
+    "@types/restify": "^8.4.2"
+  }
+}
