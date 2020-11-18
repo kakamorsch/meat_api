@@ -2,8 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const restify = require("restify");
+const mongoose = require("mongoose");
 const environment_1 = require("../common/environment");
 class Server {
+    initializeDb() {
+        return mongoose.connect(environment_1.environment.db.url, {
+            useNewUrlParser: true,
+        });
+    }
     initRoutes(routers) {
         return new Promise((resolve, reject) => {
             try {
@@ -12,6 +18,7 @@ class Server {
                     version: "1.0.0",
                 });
                 this.application.use(restify.plugins.queryParser());
+                this.application.use(restify.plugins.bodyParser());
                 for (let router of routers) {
                     router.applyRoutes(this.application);
                 }
@@ -25,7 +32,7 @@ class Server {
         });
     }
     bootstrap(routers = []) {
-        return this.initRoutes(routers).then(() => this);
+        return this.initializeDb().then(() => this.initRoutes(routers).then(() => this));
     }
 }
 exports.Server = Server;
