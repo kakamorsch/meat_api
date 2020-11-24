@@ -45,17 +45,28 @@ class UsersRouter extends Router {
           return next();
         });
     });
-    application.patch("/users/:id", (req, res, next) =>{
-      const options = {new: true}
-      User.findByIdAndUpdate(req.params.id, req.body, options).then(user=>{
-        if(user){
-          res.json(user)
-          return next()
+    application.patch("/users/:id", (req, res, next) => {
+      const options = { new: true };
+      User.findByIdAndUpdate(req.params.id, req.body, options).then((user) => {
+        if (user) {
+          res.json(user);
+          return next();
         } else {
-          res.send(404)
+          res.send(404);
         }
-      })
-    })
+      });
+    });
+    application.del("/users/:id", (req, res, next) => {
+      User.deleteOne({ _id: req.params.id }).then((cmdResult: any) => {
+        if (cmdResult.n) {
+          console.log(cmdResult.n);
+          res.send(204);
+        } else {
+          res.send(404);
+        }
+        return next();
+      });
+    });
   }
 }
 
