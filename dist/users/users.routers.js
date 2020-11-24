@@ -31,17 +31,31 @@ class UsersRouter extends router_1.Router {
         });
         application.put("/users/:id", (req, res, next) => {
             const options = { overwrite: true };
-            users_model_1.User.update({ _id: req.params.id }, req.body, options).exec().then(res => {
+            users_model_1.User.update({ _id: req.params.id }, req.body, options)
+                .exec()
+                .then((res) => {
                 if (res.n) {
                     return users_model_1.User.findById(req.params.id);
                 }
                 else {
                     res.send(404);
                 }
-            }).then(user => {
-                console.log(user);
+            })
+                .then((user) => {
                 res.json(user);
                 return next();
+            });
+        });
+        application.patch("/users/:id", (req, res, next) => {
+            const options = { new: true };
+            users_model_1.User.findByIdAndUpdate(req.params.id, req.body, options).then(user => {
+                if (user) {
+                    res.json(user);
+                    return next();
+                }
+                else {
+                    res.send(404);
+                }
             });
         });
     }
