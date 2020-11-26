@@ -8,5 +8,5 @@ Run `yarn`
 - Start the project:
 Run `yarn dev`
 
-- Compiling TS
+- Start the TS compiler watcher:
 Run `yarn ts`
