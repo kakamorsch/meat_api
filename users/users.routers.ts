@@ -3,30 +3,23 @@ import * as restify from "restify";
 import { User } from "./users.model";
 
 class UsersRouter extends Router {
+  constructor() {
+    super();
+    this.on("beforeRender", (document) => {
+      document.password = undefined;
+    });
+  }
+
   applyRoutes(application: restify.Server) {
     application.get("/users", (req, res, next) => {
-      User.find().then((users) => {
-        res.json(users);
-        return next();
-      });
+      User.find().then(this.render(res, next));
     });
     application.get("/users/:id", (req, res, next) => {
-      User.findById(req.params.id).then((user) => {
-        if (user) {
-          res.json(user);
-          return next();
-        }
-        res.send(404);
-        return next();
-      });
+      User.findById(req.params.id).then(this.render(res, next));
     });
     application.post("/users", (req, res, next) => {
       let user = new User(req.body);
-      user.save().then((user) => {
-        user.password = undefined;
-        res.json(user);
-        return next();
-      });
+      user.save().then(this.render(res, next));
     });
 
     application.put("/users/:id", (req, res, next) => {
@@ -40,21 +33,13 @@ class UsersRouter extends Router {
             res.send(404);
           }
         })
-        .then((user) => {
-          res.json(user);
-          return next();
-        });
+        .then(this.render(res, next));
     });
     application.patch("/users/:id", (req, res, next) => {
       const options = { new: true };
-      User.findByIdAndUpdate(req.params.id, req.body, options).then((user) => {
-        if (user) {
-          res.json(user);
-          return next();
-        } else {
-          res.send(404);
-        }
-      });
+      User.findByIdAndUpdate(req.params.id, req.body, options).then(
+        this.render(res, next)
+      );
     });
     application.del("/users/:id", (req, res, next) => {
       User.deleteOne({ _id: req.params.id }).then((cmdResult: any) => {
