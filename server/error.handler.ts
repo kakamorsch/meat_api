@@ -12,6 +12,7 @@ export const handleError = (req: restify.Request, res: restify.Response, error, 
             }
             break
         case "ValidationError":
+            error.statusCode = 400
             break
     }
     done()
