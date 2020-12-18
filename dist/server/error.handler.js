@@ -14,6 +14,7 @@ const handleError = (req, res, error, done) => {
             }
             break;
         case "ValidationError":
+            error.statusCode = 400;
             break;
     }
     done();
