@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.usersRouter = void 0;
 const router_1 = require("../common/router");
 const users_model_1 = require("./users.model");
+const restify_errors_1 = require("restify-errors");
 class UsersRouter extends router_1.Router {
     constructor() {
         super();
@@ -30,7 +31,7 @@ class UsersRouter extends router_1.Router {
                     return users_model_1.User.findById(req.params.id);
                 }
                 else {
-                    res.send(404);
+                    throw new restify_errors_1.NotFoundError("The document requested doesn't exist");
                 }
             })
                 .then(this.render(res, next)).catch(next);
@@ -46,7 +47,7 @@ class UsersRouter extends router_1.Router {
                     res.send(204);
                 }
                 else {
-                    res.send(404);
+                    throw new restify_errors_1.NotFoundError("The document that you want to remove doesn't exist");
                 }
                 return next();
             }).catch(next);

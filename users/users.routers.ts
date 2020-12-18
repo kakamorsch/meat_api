@@ -1,6 +1,7 @@
 import { Router } from "../common/router";
 import * as restify from "restify";
 import { User } from "./users.model";
+import { NotFoundError } from "restify-errors"
 
 class UsersRouter extends Router {
   constructor() {
@@ -30,7 +31,7 @@ class UsersRouter extends Router {
           if (res.n) {
             return User.findById(req.params.id);
           } else {
-            res.send(404);
+            throw new NotFoundError("The document requested doesn't exist")
           }
         })
         .then(this.render(res, next)).catch(next);
@@ -47,7 +48,7 @@ class UsersRouter extends Router {
           console.log(cmdResult.n);
           res.send(204);
         } else {
-          res.send(404);
+          throw new NotFoundError("The document that you want to remove doesn't exist")
         }
         return next();
       }).catch(next);
