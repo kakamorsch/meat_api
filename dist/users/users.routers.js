@@ -12,14 +12,14 @@ class UsersRouter extends router_1.Router {
     }
     applyRoutes(application) {
         application.get("/users", (req, res, next) => {
-            users_model_1.User.find().then(this.render(res, next));
+            users_model_1.User.find().then(this.render(res, next)).catch(next);
         });
         application.get("/users/:id", (req, res, next) => {
-            users_model_1.User.findById(req.params.id).then(this.render(res, next));
+            users_model_1.User.findById(req.params.id).then(this.render(res, next)).catch(next);
         });
         application.post("/users", (req, res, next) => {
             let user = new users_model_1.User(req.body);
-            user.save().then(this.render(res, next));
+            user.save().then(this.render(res, next)).catch(next);
         });
         application.put("/users/:id", (req, res, next) => {
             const options = { overwrite: true };
@@ -33,11 +33,11 @@ class UsersRouter extends router_1.Router {
                     res.send(404);
                 }
             })
-                .then(this.render(res, next));
+                .then(this.render(res, next)).catch(next);
         });
         application.patch("/users/:id", (req, res, next) => {
             const options = { new: true };
-            users_model_1.User.findByIdAndUpdate(req.params.id, req.body, options).then(this.render(res, next));
+            users_model_1.User.findByIdAndUpdate(req.params.id, req.body, options).then(this.render(res, next)).catch(next);
         });
         application.del("/users/:id", (req, res, next) => {
             users_model_1.User.deleteOne({ _id: req.params.id }).then((cmdResult) => {
@@ -49,7 +49,7 @@ class UsersRouter extends router_1.Router {
                     res.send(404);
                 }
                 return next();
-            });
+            }).catch(next);
         });
     }
 }

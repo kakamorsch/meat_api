@@ -4,6 +4,7 @@ exports.Server = void 0;
 const restify = require("restify");
 const mongoose = require("mongoose");
 const environment_1 = require("../common/environment");
+const error_handler_1 = require("./error.handler");
 class Server {
     initializeDb() {
         return mongoose.connect(environment_1.environment.db.url, {
@@ -25,6 +26,7 @@ class Server {
                 this.application.listen(environment_1.environment.server.port, () => {
                     resolve(this.application);
                 });
+                this.application.on("restifyError", error_handler_1.handleError);
             }
             catch (error) {
                 reject(error);
