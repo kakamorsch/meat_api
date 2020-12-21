@@ -8,6 +8,7 @@ export class Server {
   initializeDb() {
     return mongoose.connect(environment.db.url, {
       useNewUrlParser: true,
+      useUnifiedTopology: true
     });
   }
   initRoutes(routers: Router[]): Promise<any> {
